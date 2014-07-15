@@ -3,3 +3,8 @@ pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.next
 release.properties
+/generate-tables
+/output
+/.settings
+/.classpath
+/.project
