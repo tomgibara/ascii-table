@@ -1,0 +1,70 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="1800" height="1800" viewBox="0 0 1800 1800" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+><style type="text/css"><![CDATA[
+
+@import url(http://fonts.googleapis.com/css?family=Cousine:400,700);
+
+text {
+  font-family: 'Cousine';
+  font-weight: 400;
+}
+
+/* smallest font */
+.char-ref, .name {
+  font-size: 18px;
+}
+
+/* small font */
+.num-ref, .ctrl, text.heading, .copyright, .caption {
+  font-size: 24px;
+}
+
+/* medium font */
+.abbr {
+  font-size: 40px;
+}
+
+/* large font */
+.glyph {
+  font-size: 80px;
+}
+
+.blank {
+  fill: white;
+}
+
+.control {
+fill: #e0e0e0;
+}
+
+.printable {
+  fill: white;
+}
+
+.syntax {
+  fill: #e0e0e0;
+}
+
+.ctrl {
+  font-weight: 700;
+  fill: black;
+}
+
+.line {
+  stroke: black;
+  fill: none;
+  stroke-width: 2px;
+}
+
+rect.heading {
+  fill: black;
+}
+
+text.heading {
+  fill: white;
+  font-weight: 700;
+}
+
+]]></style><g
+/></svg>
