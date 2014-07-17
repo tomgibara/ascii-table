@@ -3,13 +3,17 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
@@ -30,7 +34,9 @@ import org.apache.batik.util.XMLResourceDescriptor;
 import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
-import com.tomgibara.fonts.woff.parser.WoffParser;
+import com.google.common.base.Charsets;
+import com.google.common.io.BaseEncoding;
+import com.google.common.io.ByteStreams;
 
 public class AsciiTable {
 
@@ -78,6 +84,10 @@ public class AsciiTable {
 		"LATIN SM\nLETTER P", "LATIN SM\nLETTER Q", "LATIN SM\nLETTER R", "LATIN SM\nLETTER S", "LATIN SM\nLETTER T", "LATIN SM\nLETTER U", "LATIN SM\nLETTER V", "LATIN SM\nLETTER W", "LATIN SM\nLETTER X", "LATIN SM\nLETTER Y", "LATIN SM\nLETTER Z", "L. CURLY\nBRACKET", "VERTICAL\nLINE", "R. CURLY\nBRACKET", "TILDE", "DELETE",
 	};
 
+	private static String dataUrl(byte[] bytes) {
+		return "data:font/ttf;base64," + BaseEncoding.base64().encode(bytes);
+	}
+
 	private static final Color lightGrey = new Color(0xffe0e0e0);
 
 	private static boolean isControl(int index) {
@@ -89,7 +99,7 @@ public class AsciiTable {
 		System.exit(1);
 	}
 
-	public static void main(String... args) throws IOException {
+	public static void main(String... args) throws IOException, FontFormatException {
 		if (args.length != 2) {
 			reportUsage();
 		}
@@ -111,33 +121,41 @@ public class AsciiTable {
 		this.file = file;
 	}
 
-	public void output() throws IOException {
-		//Note font loading & sizing is hardwired this to match css @import
-		Font cousine400;
-		Font cousine700;
-
-		if (Boolean.valueOf(System.getProperty("useLocalFonts", "false"))) {
-			cousine400 = new Font("Cousine", Font.PLAIN, 12);
-			cousine700 = new Font("Cousine Bold", Font.PLAIN, 12);
-		} else {
-			WoffParser parser = new WoffParser();
-			cousine400 = parser.parse(new URL("http://fonts.gstatic.com/s/cousine/v8/CJJ-BXzwL4jWItOg5qolAA.woff").openStream()).getFont();
-			cousine700 = parser.parse(new URL("http://fonts.gstatic.com/s/cousine/v8/XkYjaL8YjqL9qW8o0T14uRsxEYwM7FgeyaSgU71cLG0.woff").openStream()).getFont();
+	public void output() throws IOException, FontFormatException {
+		Class<?> clss = getClass();
+		byte[] regFontBytes;
+		try (InputStream in = clss.getResourceAsStream("Cousine-Regular-Compact.ttf")) {
+			regFontBytes = ByteStreams.toByteArray(in);
 		}
+		byte[] bldFontBytes;
+		try (InputStream in = clss.getResourceAsStream("Cousine-Bold-Compact.ttf")) {
+			bldFontBytes = ByteStreams.toByteArray(in);
+		}
+		
+		Font font = Font.createFont(Font.TRUETYPE_FONT, new ByteArrayInputStream(regFontBytes));
+		Font boldFont = Font.createFont(Font.TRUETYPE_FONT, new ByteArrayInputStream(bldFontBytes));
 
+		String blank;
+		try (InputStream in = clss.getResourceAsStream("blank.svg")) {
+			byte[] bytes = ByteStreams.toByteArray(in);
+			blank = new String(bytes, Charsets.UTF_8)
+				.replace("REGULAR_URL", dataUrl(regFontBytes))
+				.replace("BOLD_URL", dataUrl(bldFontBytes));
+		}
+		
 		if (png) {
 			BufferedImage image = new BufferedImage(1800, 1800, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = image.createGraphics();
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-			draw(g, cousine400, cousine700);
+			draw(g, font, boldFont);
 
 			ImageIO.write(image, "PNG", file);
 		} else {
 			URL url = AsciiTable.class.getResource("blank.svg");
 			String parser = XMLResourceDescriptor.getXMLParserClassName();
 			SAXSVGDocumentFactory factory = new SAXSVGDocumentFactory(parser);
-			SVGDocument document = factory.createSVGDocument(url.toString(), url.openStream());
+			SVGDocument document = factory.createSVGDocument(url.toString(), new StringReader(blank));
 
 			String svgNs = SVG12DOMImplementation.SVG_NAMESPACE_URI;
 			SVGGraphics2D g = new SVGGraphics2D(document);
@@ -145,7 +163,7 @@ public class AsciiTable {
 			ClassStyleHandler handler = new ClassStyleHandler(g.getGeneratorContext().getStyleHandler());
 			g.getGeneratorContext().setStyleHandler(handler);
 			g.setSVGCanvasSize(new Dimension(1800, 1800));
-			draw(g, cousine400, cousine700);
+			draw(g, font, boldFont);
 
 			try (FileWriter out = new FileWriter(file)) {
 				TransformerFactory tf = TransformerFactory.newInstance();

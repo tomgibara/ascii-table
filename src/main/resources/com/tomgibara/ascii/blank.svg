@@ -3,7 +3,18 @@
 <svg width="1800" height="1800" viewBox="0 0 1800 1800" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
 ><style type="text/css"><![CDATA[
 
-@import url(http://fonts.googleapis.com/css?family=Cousine:400,700);
+@font-face {
+  font-family: 'Cousine';
+  font-style: normal;
+  font-weight: 400;
+  src: url(REGULAR_URL) format('truetype');
+}
+@font-face {
+  font-family: 'Cousine';
+  font-style: normal;
+  font-weight: 700;
+  src: url(BOLD_URL) format('truetype');
+}
 
 text {
   font-family: 'Cousine';
