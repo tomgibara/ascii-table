@@ -18,6 +18,6 @@ Generated output is licensed under a Creative Commons 'Attribution-ShareAlike' l
 
 Finally, here's the table the application generates as a PNG.
 
-![ASCII Table (PNG)](https://raw.githubusercontent.com/wiki/tomgibara/ascii-table/tables/ascii-table-1.0.png)
+![ASCII Table (PNG)](https://raw.githubusercontent.com/wiki/tomgibara/ascii-table/tables/ascii-table-1.1.png)
 
-The table is also generated in SVG for high quality reproduction. Again, see [the wiki](https://github.com/tomgibara/ascii-table/wiki) for links.
+The table is also generated in SVG for high quality reproduction. Again, see [the wiki](https://github.com/tomgibara/ascii-table/wiki) for links. Note that SVG generation embeds a subset of the Cousine font (via data URLs in an inline stylesheet) to allow for reproducible renders on different systems, though this is contingent on full SVG CSS font support.
