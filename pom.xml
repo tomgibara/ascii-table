@@ -6,6 +6,34 @@
   <name>ASCII Table</name>
   <description>Generates a table of ASCII code and related information</description>
 
+  <developers>
+    <developer>
+      <id>tomgibara</id>
+      <name>Tom Gibara</name>
+      <email>me@tomgibara.com</email>
+      <url>http://www.tomgibara.com</url>
+      <roles>
+        <role>Administrator</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>0</timezone>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git@github.com:tomgibara/ascii-table.git</connection>
+    <developerConnection>scm:git:git@github.com:tomgibara/ascii-table.git</developerConnection>
+    <url>git@github.com:tomgibara/ascii-table.git</url>
+  </scm>
+
   <build>
     <plugins>
       <plugin>
