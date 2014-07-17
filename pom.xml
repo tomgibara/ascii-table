@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.tomgibara.ascii</groupId>
   <artifactId>ascii-table</artifactId>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <name>ASCII Table</name>
   <description>Generates a table of ASCII code and related information</description>
 
